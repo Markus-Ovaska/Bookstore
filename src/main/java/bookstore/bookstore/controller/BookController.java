@@ -51,7 +51,7 @@ public class BookController {
                 Category category = CategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + categoryId));
     
-        // Create and save the book with the selected category
+        // tallenna uusi kirja
         Book book = new Book(title, author, publicationYear, isbn, price, category);
         book.setCategory(category);
         bookRepository.save(book);
