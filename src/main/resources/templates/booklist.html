@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Book List</title>
+    <style>
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .add-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .add-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Book List</h1>
+
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publication Year</th>
+                <th>ISBN</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.publicationYear}"></td>
+                <td th:text="${book.isbn}"></td>
+                <td th:text="${book.price}"></td>
+                <td>
+                    <a th:href="@{/deletebook/{id}(id=${book.id})}"
+                        onclick="return confirm('Are you sure you want to delete this book?');">
+                        Delete
+                    </a>
+                </td>
+                <td><a th:href="@{/editbook/{id}(id=${book.id})}">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+            </a>
+        </tbody>
+    </table>
+    <div class="add-button-container">
+        <a href="/addbook">
+            <button type="button" class="add-button">Add Book</button>
+        </a>
+    </div>
+
+</body>
+
+</html>
