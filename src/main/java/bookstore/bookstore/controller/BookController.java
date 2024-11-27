@@ -4,6 +4,8 @@ import bookstore.bookstore.domain.Book;
 import bookstore.bookstore.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import bookstore.bookstore.domain.Category;
+import bookstore.bookstore.repository.CategoryRepository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +21,9 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private CategoryRepository CategoryRepository;
+
     @GetMapping("/booklist")
 
     // kirjojen haku
@@ -30,7 +35,8 @@ public class BookController {
     }
 
     @GetMapping("/addbook")
-    public String showAddBookForm() {
+    public String showAddBookForm(Model model) {
+        model.addAttribute("categories", CategoryRepository.findAll());
         return "addbook";
     }
 
@@ -39,8 +45,15 @@ public class BookController {
             @RequestParam String author,
             @RequestParam int publicationYear,
             @RequestParam String isbn,
-            @RequestParam double price) {
-        Book book = new Book(title, author, publicationYear, isbn, price);
+            @RequestParam double price,
+            @RequestParam Long categoryId) {
+
+                Category category = CategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID: " + categoryId));
+    
+        // Create and save the book with the selected category
+        Book book = new Book(title, author, publicationYear, isbn, price, category);
+        book.setCategory(category);
         bookRepository.save(book);
         return "redirect:/booklist"; // ohjaa takaisin booklist sivulle
     }
